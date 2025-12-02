@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog 3 - Nginx và Load Balancing</title>
+    <style>
+        body { font-family: sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; line-height: 1.6; }
+        img { max-width: 100%; height: auto; border-radius: 8px; margin: 20px 0; }
+        .back-btn { display: inline-block; background: #e67e22; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin-top: 20px; }
+        .back-btn:hover { background: #d35400; }
+    </style>
+</head>
+<body>
+    <h1>Bài 3: Tìm hiểu về Nginx Reverse Proxy</h1>
+    <p><i>Ngày đăng: 02/12/2025 - Tác giả: Sinh viên 52200273 và 52200259</i></p>
+
+    <img src="https://placehold.co/800x400/e67e22/ffffff?text=Nginx+Load+Balancer" alt="Anh minh hoa Nginx">
+
+    <h2>Reverse Proxy là gì?</h2>
+    <p>Reverse Proxy là một máy chủ đứng trước các web server, chuyển tiếp các yêu cầu của máy khách (client) đến các web server đó. Trong bài này, Nginx đóng vai trò là cổng vào duy nhất (Gateway).</p>
+
+    <h2>Cân bằng tải (Load Balancing)</h2>
+    <p>Chúng ta đã cấu hình Nginx để phân phối lưu lượng truy cập giữa 2 Web Server:</p>
+    <pre style="background: #f4f4f4; padding: 10px; border-radius: 5px;">
+upstream web_cluster {
+    server web-frontend-server:80;
+    server web-frontend-server-2:80;
+}
+    </pre>
+    <p>Thuật toán sử dụng là <strong>Round Robin</strong>, giúp hệ thống không bị quá tải cục bộ tại một server duy nhất, tăng tính sẵn sàng cho ứng dụng.</p>
+
+    <br>
+    <a href="index.html" class="back-btn">← Quay lại danh sách bài viết</a>
+</body>
+</html>

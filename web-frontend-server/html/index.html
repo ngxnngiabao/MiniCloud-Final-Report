@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyMiniCloud - Dashboard</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: #ffffff;
+            width: 100%;
+            max-width: 800px;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+
+        .banner-img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        p.description {
+            line-height: 1.6;
+            margin-bottom: 30px;
+            color: #555;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: #3498db;
+            color: white;
+            padding: 15px 35px;
+            text-decoration: none;
+            font-size: 1.1em;
+            font-weight: bold;
+            border-radius: 30px;
+            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 0 4px 6px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .footer {
+            margin-top: 40px;
+            font-size: 0.9em;
+            color: #999;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>☁️ MyMiniCloud Home</h1>
+        <div class="subtitle">Hệ thống mô phỏng Điện toán đám mây dành cho sinh viên</div>
+
+        <img src="https://placehold.co/800x350/34495e/ffffff?text=Welcome+to+MyMiniCloud+System" class="banner-img" alt="Dashboard Banner">
+
+        <p class="description">
+            Chào mừng thầy/cô và các bạn đến với hệ thống <strong>MyMiniCloud</strong>.<br> 
+            Đây là dự án mô phỏng kiến trúc Microservices với 9 thành phần server cốt lõi,<br> 
+            bao gồm Web Server, App API, Database, Auth Server và hệ thống giám sát Monitoring.<br>
+        </p>
+
+        <a href="/blog/" class="btn">📖 Vào xem Blog Công nghệ</a>
+
+        <div class="footer">
+            Phát triển bởi Sinh viên 52200273 và 52200259 &bull; Cloud App Integration Practice
+        </div>
+    </div>
+
+</body>
+</html>

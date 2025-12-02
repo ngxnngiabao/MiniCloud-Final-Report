@@ -1,0 +1,120 @@
+version: '3'
+
+networks:
+  cloud-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.10.10.0/24
+
+services:
+  web-frontend-server:
+    build: ./web-frontend-server
+    container_name: web-frontend-server
+    networks:
+      cloud-net:
+        ipv4_address: 10.10.10.10
+    ports: ["8080:80"]
+
+  web-frontend-server-2:
+    build: ./web-frontend-server
+    container_name: web-frontend-server-2
+    networks:
+      cloud-net:
+
+  application-backend-server:
+    build: ./application-backend-server
+    container_name: application-backend-server
+    networks:
+      cloud-net:
+        ipv4_address: 10.10.10.11
+    ports: ["8085:8081"]
+    environment:
+      OIDC_ISSUER: "http://localhost:8081/realms/realm_sv52200273_sv52200259"
+      OIDC_AUDIENCE: "account"
+
+  relational-database-server:
+    image: mariadb:11
+    container_name: relational-database-server
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: minicloud
+    volumes:
+      - ./relational-database-server/init:/docker-entrypoint-initdb.d:ro
+    ports: ["3306:3306"]
+    networks: [cloud-net]
+
+  authentication-identity-server:
+    image: quay.io/keycloak/keycloak:22.0
+    container_name: authentication-identity-server
+    command: ["start-dev"]
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_HTTP_ENABLED: "true"
+      KC_HOSTNAME_STRICT: "false"
+      KC_HOSTNAME_STRICT_HTTPS: "false"
+      KC_PROXY: "edge"
+    ports: ["8081:8080"]
+    volumes:
+      - ./keycloak-data:/opt/keycloak/data
+    networks:
+      cloud-net:
+        ipv4_address: 10.10.10.12
+
+  object-storage-server:
+    image: minio/minio
+    container_name: object-storage-server
+    command: ["server", "/data", "--console-address", ":9001"]
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    ports: ["9000:9000", "9001:9001"]
+    volumes:
+      - ./minio-data:/data
+    networks:
+      cloud-net:
+        ipv4_address: 10.10.10.13
+
+  internal-dns-server:
+    image: internetsystemsconsortium/bind9:9.18
+    container_name: internal-dns-server
+    ports: ["1053:53/udp"]
+    volumes:
+      - ./internal-dns-server/named.conf:/etc/bind/named.conf:ro
+      - ./internal-dns-server/db.cloud.local:/etc/bind/db.cloud.local:ro
+    networks: [cloud-net]
+
+  monitoring-node-exporter-server:
+    image: prom/node-exporter:latest
+    container_name: monitoring-node-exporter-server
+    ports: ["9100:9100"]
+    networks: [cloud-net]
+
+  monitoring-prometheus-server:
+    image: prom/prometheus:latest
+    container_name: monitoring-prometheus-server
+    ports: ["9090:9090"]
+    volumes:
+      - ./monitoring-prometheus-server/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    networks: [cloud-net]
+
+  monitoring-grafana-dashboard-server:
+    image: grafana/grafana:latest
+    container_name: monitoring-grafana-dashboard-server
+    ports: ["3000:3000"]
+    volumes:
+      - ./grafana-data:/var/lib/grafana
+    networks: [cloud-net]
+
+  api-gateway-proxy-server:
+    image: nginx:stable
+    container_name: api-gateway-proxy-server
+    depends_on:
+      - web-frontend-server
+      - application-backend-server
+      - authentication-identity-server
+    ports: ["80:80"]
+    volumes:
+      - ./api-gateway-proxy-server/nginx.conf:/etc/nginx/nginx.conf:ro
+    networks: [cloud-net]

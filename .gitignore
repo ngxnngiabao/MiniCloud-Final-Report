@@ -1,0 +1,11 @@
+keycloak-data/
+minio-data/
+grafana-data/
+mysql-data/
+
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
+
+*.log
